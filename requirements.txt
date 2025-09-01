@@ -1,0 +1,9 @@
+backend
+npm install express mongoose cors dotenv bcrypt jsonwebtoken
+
+frontend
+npm install axios react-router-dom
+
+multer
+
+npm install react-leaflet leaflet
