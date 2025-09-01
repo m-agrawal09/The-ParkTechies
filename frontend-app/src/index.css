@@ -1,0 +1,10 @@
+@import url("https://unpkg.com/leaflet/dist/leaflet.css");
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9fafb;
+    margin: 0;
+    padding: 0;
+  }
+  
