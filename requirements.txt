@@ -7,3 +7,4 @@ npm install axios react-router-dom
 multer
 
 npm install react-leaflet leaflet
+npm i react-qr-code

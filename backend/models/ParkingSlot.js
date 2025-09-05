@@ -8,6 +8,11 @@ const ParkingSlotSchema = new mongoose.Schema({
   price: Number,
   images: [String],
   active: { type: Boolean, default: true },
+  availability: {
+    type: Map,
+    of: Number,
+    default: {},
+  },
   location: {
     type: { type: String, enum: ['Point'], required: true },
     coordinates: { type: [Number], required: true },

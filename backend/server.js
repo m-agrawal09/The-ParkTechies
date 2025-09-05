@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
+const paymentRoutes = require("./routes/payment");
 
 dotenv.config();
 
@@ -19,6 +20,10 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/slots', require('./routes/slots'));
 app.use('/api/booking', require('./routes/booking'));
+//payment routes
+app.use("/api/payment", paymentRoutes);
+app.use('/api/booking', require('./routes/booking'));
+
 // Add payment, admin routes similarly when ready
 
 // Upload route and static folder for uploaded files
@@ -29,3 +34,5 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+
