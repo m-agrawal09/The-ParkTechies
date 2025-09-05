@@ -1,0 +1,78 @@
+/* Slot List wrapper */
+.slot-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Individual Slot Card */
+.slot-item {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid maroon;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 18px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Hover effect */
+.slot-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 245, 240, 0.95);
+}
+
+/* Flex layout for image + info */
+.slot-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Thumbnail wrapper */
+.slot-thumbnail {
+  flex: 0 0 100px;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Thumbnail image */
+.slot-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Placeholder if no image */
+.slot-placeholder {
+  color: #666;
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Info text */
+.slot-info {
+  flex: 1;
+}
+
+.slot-address {
+  margin: 0 0 8px 0;
+  color: maroon;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.slot-info p {
+  margin: 3px 0;
+  font-size: 14px;
+  color: #333;
+}

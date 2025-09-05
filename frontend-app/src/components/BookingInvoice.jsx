@@ -1,45 +1,50 @@
+import React from "react";
+import "../styles/BookingInvoice.css";
+
 export default function BookingInvoice({ bookingDetails, setBookingDetails, slotPrice, onConfirm, errorMessage }) {
-    const totalAmount = bookingDetails.noOfSlots * slotPrice;
-  
-    const handleCheckboxChange = (e) => {
-      setBookingDetails(prev => ({
-        ...prev,
-        acceptedTerms: e.target.checked,
-      }));
-    };
-  
-    return (
-      <div style={{ maxWidth: 400, marginTop: 20 }}>
-        <h3>Invoice & Terms</h3>
-        <p>Number of Slots: <b>{bookingDetails.noOfSlots}</b></p>
-        <p>Price per Slot: <b>₹{slotPrice}</b></p>
-        <p>Total Amount: <b>₹{totalAmount}</b></p>
-        <label style={{ display: "block", margin: "15px 0" }}>
+  const totalAmount = bookingDetails.noOfSlots * slotPrice;
+
+  const handleCheckboxChange = (e) => {
+    setBookingDetails((prev) => ({
+      ...prev,
+      acceptedTerms: e.target.checked,
+    }));
+  };
+
+  return (
+    <div className="invoice-container">
+      <h3 className="invoice-title">Invoice & Terms</h3>
+      <p className="invoice-line">
+        Number of Slots: <b>{bookingDetails.noOfSlots}</b>
+      </p>
+      <p className="invoice-line">
+        Price per Slot: <b>₹{slotPrice}</b>
+      </p>
+      <p className="invoice-line">
+        Total Amount: <b>₹{totalAmount}</b>
+      </p>
+
+      <label className="invoice-checkbox">
         <input
-            type="checkbox"
-            checked={bookingDetails.acceptedTerms || false}
-            onChange={(e) => setBookingDetails({...bookingDetails, acceptedTerms: e.target.checked})}
-            />{" "}
-          I accept the <a href="/terms" target="_blank" rel="noopener noreferrer">Terms and Conditions</a>
-        </label>
-        <button
-          onClick={onConfirm}
-          disabled={!bookingDetails.acceptedTerms}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: bookingDetails.acceptedTerms ? "#28a745" : "#888",
-            color: "white",
-            border: "none",
-            borderRadius: 6,
-            cursor: bookingDetails.acceptedTerms ? "pointer" : "not-allowed",
-          }}
-        >
-          Confirm and Pay
-        </button>
-        {errorMessage && (
-          <p style={{ marginTop: 15, color: "red" }}>{errorMessage}</p>
-        )}
-      </div>
-    );
-  }
-  
+          type="checkbox"
+          checked={bookingDetails.acceptedTerms || false}
+          onChange={handleCheckboxChange}
+        />{" "}
+        I accept the{" "}
+        <a href="/terms" target="_blank" rel="noopener noreferrer">
+          Terms and Conditions
+        </a>
+      </label>
+
+      <button
+        onClick={onConfirm}
+        disabled={!bookingDetails.acceptedTerms}
+        className={`invoice-btn ${bookingDetails.acceptedTerms ? "active" : "disabled"}`}
+      >
+        Confirm and Pay
+      </button>
+
+      {errorMessage && <p className="invoice-error">{errorMessage}</p>}
+    </div>
+  );
+}

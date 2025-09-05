@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LocationPicker from "./LocationPicker";
+import "../styles/HostDashboard.css";
 
 const backendURL = "http://localhost:5000/api/slots";
 const uploadURL = "http://localhost:5000/api/upload";
@@ -25,7 +26,9 @@ export default function HostDashboard({ userName }) {
         const res = await axios.get(backendURL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const mySlots = res.data.filter((slot) => slot.host && slot.host.name === userName);
+        const mySlots = res.data.filter(
+          (slot) => slot.host && slot.host.name === userName
+        );
         setSlots(mySlots);
       } catch (err) {
         console.error(err);
@@ -117,12 +120,12 @@ export default function HostDashboard({ userName }) {
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 800, margin: "auto" }}>
+    <div className="host-dashboard">
       <h2>Host Dashboard</h2>
       <p>Welcome, {userName}</p>
 
-      <h3>Add Parking Slot</h3>
-      <form onSubmit={handleAddSlot} style={{ marginBottom: 20 }}>
+      <h3 className="section-title">Add Parking Slot</h3>
+      <form onSubmit={handleAddSlot} className="slot-form">
         <input
           type="text"
           name="address"
@@ -130,7 +133,7 @@ export default function HostDashboard({ userName }) {
           onChange={handleChange}
           placeholder="Address"
           required
-          style={{ width: "100%", padding: 8, marginBottom: 8 }}
+          className="form-input"
         />
         <input
           type="number"
@@ -139,7 +142,7 @@ export default function HostDashboard({ userName }) {
           onChange={handleChange}
           placeholder="Total Slots"
           required
-          style={{ width: "100%", padding: 8, marginBottom: 8 }}
+          className="form-input"
         />
         <input
           type="number"
@@ -148,39 +151,29 @@ export default function HostDashboard({ userName }) {
           onChange={handleChange}
           placeholder="Price per Slot"
           required
-          style={{ width: "100%", padding: 8, marginBottom: 8 }}
+          className="form-input"
         />
 
-        <label style={{ marginBottom: 8, display: "block" }}>Select Location on Map</label>
+        <label className="form-label">Select Location on Map</label>
         <LocationPicker onLocationChange={setLocation} />
 
-        <label style={{ display: "block", marginTop: 12, marginBottom: 8 }}>Upload Images</label>
+        <label className="form-label">Upload Images</label>
         <input type="file" accept="image/*" onChange={handleFileChange} />
         {uploading && <p>Uploading image...</p>}
-        {uploadError && <p style={{ color: "red" }}>{uploadError}</p>}
+        {uploadError && <p className="error-text">{uploadError}</p>}
 
-        <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+        <div className="uploaded-images">
           {formData.images.map((imgUrl, idx) => (
-            <div key={idx} style={{ position: "relative" }}>
+            <div key={idx} className="uploaded-image-container">
               <img
                 src={`http://localhost:5000${imgUrl}`}
                 alt={`uploaded ${idx}`}
-                style={{ width: 100, height: 100, objectFit: "cover", borderRadius: 6 }}
+                className="uploaded-image"
               />
               <button
                 type="button"
                 onClick={() => removeImage(imgUrl)}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  right: 0,
-                  backgroundColor: "rgba(220,53,69,0.8)",
-                  border: "none",
-                  color: "white",
-                  cursor: "pointer",
-                  borderRadius: "0 6px 0 6px",
-                  padding: "0 6px",
-                }}
+                className="remove-image-btn"
               >
                 X
               </button>
@@ -188,61 +181,43 @@ export default function HostDashboard({ userName }) {
           ))}
         </div>
 
-        <button
-          type="submit"
-          style={{
-            marginTop: 15,
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: 6,
-            cursor: "pointer",
-          }}
-        >
+        <button type="submit" className="submit-btn">
           Add Slot
         </button>
       </form>
 
-      {message && <p style={{ color: "green" }}>{message}</p>}
+      {message && (
+        <p className={message.includes("Failed") ? "error-text" : "success-text"}>
+          {message}
+        </p>
+      )}
 
-      <h3>Your Parking Slots</h3>
+      <h3 className="section-title">Your Parking Slots</h3>
       {slots.length === 0 ? (
         <p>No slots added yet.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="slot-list">
           {slots.map((slot) => (
-            <li
-              key={slot._id}
-              style={{ border: "1px solid #ccc", borderRadius: 6, padding: 15, marginBottom: 15 }}
-            >
+            <li key={slot._id} className="slot-item">
               <h4>{slot.address}</h4>
               <p>Total Slots: {slot.totalSlots}</p>
               <p>Available Slots: {slot.availableSlots}</p>
               <p>Price per Slot: ₹{slot.price}</p>
               {slot.images?.length > 0 && (
-                <div style={{ display: "flex", gap: 10, overflowX: "auto" }}>
+                <div className="slot-images">
                   {slot.images.map((img, i) => (
                     <img
                       key={i}
                       src={`http://localhost:5000${img}`}
                       alt={`Slot ${i}`}
-                      style={{ height: 100, borderRadius: 6 }}
+                      className="slot-preview"
                     />
                   ))}
                 </div>
               )}
               <button
                 onClick={() => handleDelete(slot._id)}
-                style={{
-                  marginTop: 10,
-                  padding: "5px 10px",
-                  backgroundColor: "#dc3545",
-                  color: "white",
-                  border: "none",
-                  borderRadius: 6,
-                  cursor: "pointer",
-                }}
+                className="delete-btn"
               >
                 Delete
               </button>

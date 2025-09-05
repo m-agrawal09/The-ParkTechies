@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import "../styles/LocationPicker.css"; // ✅ Link CSS
 
-const DEFAULT_POSITION = [26.4499, 80.3319]; // Simhastha area example
+const DEFAULT_POSITION = [26.4499, 80.3319]; // Example location (Simhastha area)
 
 function LocationMarker({ onLocationChange }) {
   const [position, setPosition] = useState(DEFAULT_POSITION);
 
-  const map = useMapEvents({
+  useMapEvents({
     click(e) {
       setPosition([e.latlng.lat, e.latlng.lng]);
-      onLocationChange({ type: "Point", coordinates: [e.latlng.lng, e.latlng.lat] }); // GeoJSON format: [lng, lat]
+      onLocationChange({
+        type: "Point",
+        coordinates: [e.latlng.lng, e.latlng.lat], // GeoJSON format
+      });
     },
   });
 
@@ -21,7 +25,10 @@ function LocationMarker({ onLocationChange }) {
         dragend: (e) => {
           const latlng = e.target.getLatLng();
           setPosition([latlng.lat, latlng.lng]);
-          onLocationChange({ type: "Point", coordinates: [latlng.lng, latlng.lat] });
+          onLocationChange({
+            type: "Point",
+            coordinates: [latlng.lng, latlng.lat],
+          });
         },
       }}
     />
@@ -30,9 +37,15 @@ function LocationMarker({ onLocationChange }) {
 
 export default function LocationPicker({ onLocationChange }) {
   return (
-    <MapContainer center={DEFAULT_POSITION} zoom={14} style={{ height: 300, width: "100%" }}>
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <LocationMarker onLocationChange={onLocationChange} />
-    </MapContainer>
+    <div className="map-wrapper">
+      <MapContainer
+        center={DEFAULT_POSITION}
+        zoom={14}
+        className="map-container" // ✅ Use CSS class instead of inline style
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <LocationMarker onLocationChange={onLocationChange} />
+      </MapContainer>
+    </div>
   );
 }

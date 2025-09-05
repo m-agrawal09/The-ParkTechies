@@ -1,0 +1,61 @@
+.invoice-container {
+  max-width: 400px;
+  margin: 20px auto 0 auto;
+  padding: 20px;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.invoice-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+.invoice-line {
+  font-size: 15px;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.invoice-checkbox {
+  display: block;
+  margin: 15px 0;
+  font-size: 14px;
+  color: var(--text-dark);
+}
+
+.invoice-checkbox a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.invoice-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  transition: background 0.3s ease, cursor 0.3s ease;
+}
+
+.invoice-btn.active {
+  background-color: #28a745;
+  cursor: pointer;
+}
+
+.invoice-btn.disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+.invoice-error {
+  margin-top: 15px;
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+}

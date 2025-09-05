@@ -1,0 +1,153 @@
+/* User Dashboard Page */
+.dashboard-container {
+  background: linear-gradient(rgba(246, 244, 241, 0.7), rgba(246, 244, 241, 0.7)),
+    url("Mahakhumbha.jpg") no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  width: 100%;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Title & Welcome */
+.dashboard-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.dashboard-welcome {
+  font-size: 16px;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+/* Navigation */
+.dashboard-nav {
+  margin-bottom: 20px;
+}
+
+.nav-btn {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin: 0 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background: var(--primary-color);
+}
+
+.nav-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.nav-btn.active {
+  background: var(--primary-hover);
+}
+
+/* Section Title */
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+/* Back Button */
+.back-btn {
+  margin-top: 20px;
+  padding: 8px 14px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-btn:hover {
+  background: var(--primary-hover);
+}
+
+/* ===================== */
+/* SLOT LIST STYLING     */
+/* ===================== */
+
+.slot-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 900px;
+}
+
+.slot-item {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-left: 6px solid var(--primary-color);
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin: 0 0 18px 0;
+  text-align: left;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.slot-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.slot-item h4 {
+  color: var(--primary-color);
+  margin-bottom: 6px;
+}
+
+.slot-item p {
+  margin: 4px 0;
+  color: var(--text-dark);
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 22px;
+  }
+  .nav-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .slot-item {
+    padding: 12px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-title {
+    font-size: 20px;
+  }
+  .dashboard-welcome {
+    font-size: 14px;
+  }
+  .nav-btn {
+    padding: 6px 10px;
+    margin: 0 5px;
+    font-size: 12px;
+  }
+  .section-title {
+    font-size: 16px;
+  }
+  .slot-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

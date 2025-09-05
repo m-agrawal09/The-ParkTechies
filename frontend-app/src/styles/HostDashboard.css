@@ -1,0 +1,239 @@
+.host-dashboard {
+  background: linear-gradient(
+      rgba(246, 244, 241, 0.7),
+      rgba(246, 244, 241, 0.7)
+    ),
+    url("\Mahakhumbha.jpg") no-repeat center center fixed;
+  background-size: cover;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 250px;
+}
+
+.host-dashboard h2 {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.host-dashboard p {
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--text-dark);
+}
+
+.section-title {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Slot form (container like login box) */
+.slot-form {
+  background: rgba(255, 255, 255, 0.9); /* opaque white */
+  padding: 25px 30px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(128, 0, 0, 0.15);
+  margin-bottom: 30px;
+}
+
+/* Form inputs */
+.form-input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 15px;
+  background: var(--input-bg);
+  color: var(--text-dark);
+}
+
+.form-input::placeholder {
+  color: var(--text-light);
+}
+
+.form-input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  background: #fff;
+}
+
+.form-label {
+  margin-bottom: 10px;
+  display: block;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* Uploaded images */
+.uploaded-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.uploaded-image-container {
+  position: relative;
+}
+
+.uploaded-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: var(--danger-color);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+/* Buttons */
+.submit-btn {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+  font-weight: bold;
+  width: 100%;
+  font-size: 15px;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.delete-btn {
+  background-color: var(--danger-color);
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: #a71d2a;
+}
+
+/* Slots list */
+.slot-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slot-item {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ccc;
+  border-left: 6px solid var(--primary-color);
+  border-radius: 6px;
+  padding: 20px 25px;
+  margin: 0 0 25px 0;
+  box-shadow: 0 2px 4px rgba(128, 0, 0, 0.1);
+}
+
+.slot-item h4 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+}
+
+.slot-images {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.slot-preview {
+  height: 100px;
+  border-radius: 6px;
+  border: 1px solid var(--accent-color);
+}
+
+.error-text {
+  color: var(--danger-color);
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.success-text {
+  color: green;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .host-dashboard {
+    padding: 30px 60px;
+  }
+  .slot-form,
+  .slot-item {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .host-dashboard {
+    padding: 20px 30px;
+  }
+  .slot-form,
+  .slot-item {
+    padding: 15px;
+  }
+  .uploaded-image,
+  .slot-preview {
+    height: 80px;
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .host-dashboard h2 {
+    font-size: 20px;
+  }
+  .host-dashboard {
+    padding: 15px;
+  }
+  .slot-form {
+    font-size: 14px;
+    padding: 12px;
+  }
+  .form-input {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .submit-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .slot-item {
+    padding: 12px;
+  }
+}
