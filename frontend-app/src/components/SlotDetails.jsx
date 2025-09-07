@@ -99,6 +99,7 @@ export default function SlotDetails({
             </div>
           )}
         </div>
+        
 
         {/* <div style={{ flex: 1, height: 400 }}>
           {lat && lng ? (
