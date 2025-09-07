@@ -1,0 +1,176 @@
+
+
+/* Container background */
+.auth-container {
+  background: url("\Mahakhumbha.jpg") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.auth-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(246, 244, 241, 0.85);
+  z-index: -1;
+}
+
+/* Card */
+.auth-card {
+  background: rgba(255, 255, 255, 0.95); /* opaque with slight transparency */
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(128, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  z-index: 1;
+}
+
+
+.toggle-text {
+  margin-top: 15px;
+  font-size: 14px;
+  color: var(--text-dark); 
+}
+
+.toggle-btn {
+  text-decoration: underline;
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Title */
+.auth-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+}
+
+/* Form */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.auth-input,
+.auth-select {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Button */
+.auth-btn {
+  padding: 12px;
+  background-color: var(--primary-color);
+  border: none;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.auth-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Input & Select */
+.auth-input,
+.auth-select {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--input-bg); /* use new variable */
+  color: var(--text-dark);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+/* Placeholder text */
+.auth-input::placeholder,
+.auth-select::placeholder {
+  color: var(--text-dark);
+  opacity: 1;
+}
+
+/* Focus effect */
+.auth-input:focus,
+.auth-select:focus {
+  border-color: var(--primary-color);
+  background: #fff; /* highlight on focus */
+  outline: none;
+}
+
+
+/* Messages */
+.auth-message {
+  margin-top: 12px;
+  font-size: 14px;
+}
+
+.auth-message.error {
+  color: red;
+}
+
+.auth-message.success {
+  color: green;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .auth-card {
+    padding: 25px 20px;
+    max-width: 90%;
+  }
+  .auth-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 20px 15px;
+    border-radius: 10px;
+  }
+  .auth-title {
+    font-size: 16px;
+  }
+  .auth-input,
+  .auth-select,
+  .auth-btn {
+    font-size: 13px;
+    padding: 8px;
+  }
+  .toggle-text,
+  .toggle-btn {
+    font-size: 13px;
+  }
+}

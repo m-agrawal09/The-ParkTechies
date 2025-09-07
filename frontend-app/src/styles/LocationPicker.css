@@ -1,0 +1,14 @@
+/* Wrapper for map */
+.map-wrapper {
+  margin-top: 15px;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Map container */
+.map-container {
+  height: 300px;
+  width: 100%;
+}

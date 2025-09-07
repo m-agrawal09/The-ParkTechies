@@ -1,0 +1,51 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(142, 8, 8, 0.895);
+  color: white;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-logo {
+  height: 50px;
+  width: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-right button {
+  background-color: transparent;
+  border: 1px solid white;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.header-right button:hover {
+  background-color: white;
+  color: maroon;
+}
+
+.font-controls button {
+  margin: 0 2px;
+}
+
+.lang-switcher {
+  font-weight: bold;
+}

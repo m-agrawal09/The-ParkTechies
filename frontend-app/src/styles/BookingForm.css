@@ -1,0 +1,64 @@
+.booking-form {
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  border: 2px solid var(--primary-color);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95); /* opaque box */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.booking-label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+.booking-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: #fff7f7; /* light cream/pink tone */
+  color: var(--text-dark);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.booking-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 4px rgba(128, 0, 0, 0.4);
+}
+
+.booking-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.booking-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.booking-message {
+  margin-top: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.booking-message.success {
+  color: green;
+}
+
+.booking-message.error {
+  color: red;
+}

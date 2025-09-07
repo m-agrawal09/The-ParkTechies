@@ -1,24 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Layout from "./Layout";
+import "../styles/HomePage.css";
 
 export default function HomePage() {
   return (
-    <div style={{ padding: 40, textAlign: "center" }}>
-      <h1>Welcome to Parking Slot Booking</h1>
-      <p>Your easy way to find and book parking slots.</p>
-      <Link to="/auth">
-        <button style={{
-          padding: "10px 20px",
-          fontSize: 16,
-          cursor: "pointer",
-          borderRadius: 6,
-          border: "none",
-          backgroundColor: "#007bff",
-          color: "white",
-        }}>
-          Login / Register
-        </button>
-      </Link>
-    </div>
+    <Layout logoSrc="/images/logo.png">
+      <div className="home-container">
+        <div className="home-image-container">
+          <img src="/Logo.png" alt="Center" className="home-image"/>
+        </div>
+        <h1 className="home-title">Welcome to Parking Slot Booking</h1>
+        <p className="home-subtitle">Your easy way to find and book parking slots.</p>
+        <Link to="/auth">
+          <button className="home-btn">Login / Register</button>
+        </Link>
+      </div>
+    </Layout>
   );
 }
