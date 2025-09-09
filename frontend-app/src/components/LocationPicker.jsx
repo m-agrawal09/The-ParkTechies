@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import "../styles/LocationPicker.css"; // ✅ Link CSS
+import "../styles/LocationPicker.css"; 
 
-const DEFAULT_POSITION = [26.4499, 80.3319]; // Example location (Simhastha area)
+const DEFAULT_POSITION = [26.4499, 80.3319]; 
 
 function LocationMarker({ onLocationChange }) {
   const [position, setPosition] = useState(DEFAULT_POSITION);
@@ -12,8 +12,9 @@ function LocationMarker({ onLocationChange }) {
       setPosition([e.latlng.lat, e.latlng.lng]);
       onLocationChange({
         type: "Point",
-        coordinates: [e.latlng.lng, e.latlng.lat], // GeoJSON format
+        coordinates: [e.latlng.lng, e.latlng.lat], 
       });
+      console.log("Location selected:", e.latlng.lng, e.latlng.lat);
     },
   });
 
@@ -41,7 +42,7 @@ export default function LocationPicker({ onLocationChange }) {
       <MapContainer
         center={DEFAULT_POSITION}
         zoom={14}
-        className="map-container" // ✅ Use CSS class instead of inline style
+        className="map-container" 
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         <LocationMarker onLocationChange={onLocationChange} />

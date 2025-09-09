@@ -33,7 +33,7 @@ const Header = ({ logoSrc }) => {
         <button className="lang-switcher" onClick={toggleLanguage}>
           {language}
         </button>
-        <button onClick={() => (window.location.href = "/")}>Log out</button>
+
       </div>
     </header>
   );

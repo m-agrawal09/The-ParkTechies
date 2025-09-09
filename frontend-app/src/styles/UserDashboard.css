@@ -1,15 +1,13 @@
-/* User Dashboard Page */
 .dashboard-container {
   background: linear-gradient(rgba(246, 244, 241, 0.7), rgba(246, 244, 241, 0.7)),
     url("Mahakhumbha.jpg") no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
-  width: 100%;
-  padding: 20px;
+  max-width: 100vw;
+  padding: 20px 40px;
   text-align: center;
 }
 
-/* Title & Welcome */
 .dashboard-title {
   font-size: 26px;
   font-weight: bold;
@@ -23,7 +21,6 @@
   margin-bottom: 20px;
 }
 
-/* Navigation */
 .dashboard-nav {
   margin-bottom: 20px;
 }
@@ -53,15 +50,15 @@
   background: var(--primary-hover);
 }
 
-/* Section Title */
 .section-title {
   font-size: 18px;
   font-weight: bold;
-  color: var(--primary-color);
+  color: white;
+  margin-right:270px;
+  margin-left: 270px;
   margin-bottom: 15px;
 }
 
-/* Back Button */
 .back-btn {
   margin-top: 20px;
   padding: 8px 14px;
@@ -77,9 +74,6 @@
   background: var(--primary-hover);
 }
 
-/* ===================== */
-/* SLOT LIST STYLING     */
-/* ===================== */
 
 .slot-list {
   list-style: none;
@@ -117,7 +111,7 @@
   font-size: 14px;
 }
 
-/* Responsive */
+
 @media (max-width: 768px) {
   .dashboard-title {
     font-size: 22px;
@@ -144,7 +138,7 @@
     font-size: 12px;
   }
   .section-title {
-    font-size: 16px;
+    font-size: 100px;
   }
   .slot-item {
     padding: 10px 12px;

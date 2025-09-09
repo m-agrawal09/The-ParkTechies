@@ -51,11 +51,10 @@
   color: red;
 }
 
-/* Cancel button */
 .cancel-btn {
   margin-top: 12px;
   padding: 8px 14px;
-  background-color: #b22222; /* firebrick red */
+  background-color: #b22222; 
   color: white;
   border: none;
   border-radius: 6px;
@@ -65,7 +64,7 @@
 }
 
 .cancel-btn:hover {
-  background-color: #800000; /* maroon */
+  background-color: #800000; 
 }
 
 .cancel-btn:disabled {
@@ -73,7 +72,6 @@
   cursor: not-allowed;
 }
 
-/* Loading, Error, Empty States */
 .bookings-loading,
 .bookings-error,
 .bookings-empty {
@@ -91,7 +89,6 @@
 }
 
 
-/* Confirmation modal buttons */
 .modal-actions {
   margin-top: 15px;
   display: flex;

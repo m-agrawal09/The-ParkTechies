@@ -1,5 +1,5 @@
 .home-container {
-  padding: 20px 40px 40px 40px; /* reduce top padding to 20px */
+  padding: 20px 40px 40px 40px; 
   text-align: center;
   min-height: 100vh;
   background: 
@@ -8,7 +8,7 @@
   background-size: cover;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* align items to the top instead of center */
+  justify-content: flex-start; 
   align-items: center;
 }
 
@@ -41,12 +41,11 @@
   background-color: var(--primary-hover);
 }
 
-/* New: image container for centering below header */
 .home-image-container {
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-bottom: 20px; /* spacing below image */
+  margin-bottom: 20px; 
 }
 
 .home-image {
