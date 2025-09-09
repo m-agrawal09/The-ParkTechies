@@ -110,11 +110,15 @@ export default function HostDashboard({ userName }) {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
+      console.log("Deleting slot ID:", id);
+      console.log("Using token:", token);
       await axios.delete(`${backendURL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSlots((prev) => prev.filter((slot) => slot._id !== id));
+      setMessage("Slot deleted successfully");
     } catch (err) {
+      console.error("Delete error:", err);
       setMessage("Failed to delete slot");
     }
   };

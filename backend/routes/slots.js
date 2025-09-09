@@ -56,4 +56,27 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
+// Delete a parking slot by ID (host only)
+router.delete('/:id', authMiddleware, async (req, res) => {
+  console.log("DELETE request received for slot ID:", req.params.id);
+  try {
+    const slot = await ParkingSlot.findById(req.params.id);
+    if (!slot) {
+      return res.status(404).json({ error: 'Slot not found' });
+    }
+
+    if (slot.host.toString() !== req.user.userId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Replace slot.remove() with deleteOne()
+    await slot.deleteOne();
+
+    res.status(200).json({ message: 'Slot deleted successfully' });
+  } catch (err) {
+    console.error('Delete slot error:', err);
+    res.status(500).json({ error: 'Failed to delete slot' });
+  }
+});
+
 module.exports = router;

@@ -1,0 +1,57 @@
+.contact-container {
+    padding: 20px 40px 40px 40px;
+    min-height: 100vh;
+    background:
+      linear-gradient(rgba(246, 244, 241, 0.7), rgba(246, 244, 241, 0.7)),
+      url("Mahakhumbha.jpg") no-repeat center center fixed;
+    background-size: cover;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .contact-title {
+    font-size: 32px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+  }
+  
+  .contact-subtitle {
+    font-size: 18px;
+    color: var(--text-dark);
+    margin-bottom: 25px;
+  }
+  
+  .contact-info {
+    font-size: 18px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  .contact-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .contact-link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+  
+  .contact-box {
+    background-color: rgba(255, 255, 255, 0.85);
+    padding: 20px 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-top: 15px;
+  }
+  
