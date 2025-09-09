@@ -8,7 +8,7 @@ export default function MyBookings() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [confirmModal, setConfirmModal] = useState(null); 
+  const [confirmModal, setConfirmModal] = useState(null); // store bookingId when asking confirmation
 
   useEffect(() => {
     const fetchBookings = async () => {

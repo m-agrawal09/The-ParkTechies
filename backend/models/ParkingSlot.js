@@ -7,6 +7,7 @@ const ParkingSlotSchema = new mongoose.Schema({
   availableSlots: Number,
   price: Number,
   images: [String],
+  qrCode: { type: String }, // <-- add this line
   active: { type: Boolean, default: true },
   availability: {
     type: Map,

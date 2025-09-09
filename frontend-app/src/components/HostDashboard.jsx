@@ -33,7 +33,7 @@ export default function HostDashboard({ userName }) {
 
   const token = localStorage.getItem("token");
 
-  
+  // Fetch host's slots
   useEffect(() => {
     async function fetchSlots() {
       try {
@@ -51,12 +51,12 @@ export default function HostDashboard({ userName }) {
     fetchSlots();
   }, [userName, token]);
 
-  
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  
+  // Image upload
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -91,7 +91,7 @@ export default function HostDashboard({ userName }) {
     }));
   };
 
-  
+  // QR code upload
   const handleQRCodeUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -119,12 +119,12 @@ export default function HostDashboard({ userName }) {
     }
   };
 
-  
+  // Updated handleAddSlot with validation and error handling
   const handleAddSlot = async (e) => {
     e.preventDefault();
     setMessage("");
 
-    
+    // Validate location presence and coordinates
     if (
       !location ||
       !location.coordinates ||
@@ -138,27 +138,27 @@ export default function HostDashboard({ userName }) {
       return;
     }
 
-    
+    // Validate totalSlots as positive number
     const totalSlotsNum = Number(formData.totalSlots);
     if (!totalSlotsNum || totalSlotsNum <= 0) {
       setMessage("Please enter a valid positive number for total slots.");
       return;
     }
 
-    
+    // Validate price as positive number
     const priceNum = Number(formData.price);
     if (!priceNum || priceNum <= 0) {
       setMessage("Please enter a valid positive price.");
       return;
     }
 
-    
+    // Trim address to avoid blank spaces
     if (!formData.address.trim()) {
       setMessage("Address cannot be empty.");
       return;
     }
 
-    
+    // Prepare the slotData for backend
     const slotData = {
       address: formData.address.trim(),
       totalSlots: totalSlotsNum,
@@ -167,7 +167,7 @@ export default function HostDashboard({ userName }) {
       qrCode: formData.qrCode,
       location: {
         type: "Point",
-        coordinates: [location.coordinates[0], location.coordinates[1]], 
+        coordinates: [location.coordinates[0], location.coordinates[1]], // [lng, lat]
       },
     };
 
@@ -177,7 +177,7 @@ export default function HostDashboard({ userName }) {
       });
       setSlots((prev) => [...prev, res.data.slot]);
 
-      
+      // Reset form and location
       setFormData({
         address: "",
         totalSlots: "",
@@ -197,17 +197,59 @@ export default function HostDashboard({ userName }) {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this slot?")) return;
     try {
-      const token = localStorage.getItem("token");
-      console.log("Deleting slot ID:", id);
-      console.log("Using token:", token);
       await axios.delete(`${backendURL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSlots((prev) => prev.filter((slot) => slot._id !== id));
-      setMessage("Slot deleted successfully");
+      setMessage("Slot deleted successfully!");
     } catch (err) {
-      console.error("Delete error:", err);
-      setMessage("Failed to delete slot");
+      console.error(err.response || err);
+      setMessage(err.response?.data.error || "Failed to delete slot");
+    }
+  };
+
+  const handleEditClick = (slot) => {
+    setEditingSlotId(slot._id);
+    setEditForm({
+      address: slot.address,
+      totalSlots: slot.totalSlots,
+      availableSlots: slot.availableSlots,
+      price: slot.price,
+      images: slot.images,
+      qrCode: slot.qrCode || "",
+      active: slot.active,
+    });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setEditForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    try {
+      const payload = {
+        ...editForm,
+        totalSlots: Number(editForm.totalSlots),
+        availableSlots: Number(editForm.availableSlots),
+        price: Number(editForm.price),
+      };
+      const res = await axios.put(`${backendURL}/${editingSlotId}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSlots((prev) =>
+        prev.map((s) => (s._id === res.data.slot._id ? res.data.slot : s))
+      );
+      setMessage("Slot updated successfully!");
+      setEditingSlotId(null);
+    } catch (err) {
+      console.error(err.response || err);
+      setMessage(err.response?.data.error || "Update failed");
     }
   };
 

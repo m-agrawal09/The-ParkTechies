@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "../styles/Header.css";
 
 const Header = ({ logoSrc }) => {
-  const [fontSize, setFontSize] = useState(16); 
-  const [language, setLanguage] = useState("En"); 
+  const [fontSize, setFontSize] = useState(16); // default font size
+  const [language, setLanguage] = useState("En"); // default language
 
   const changeFontSize = (size) => setFontSize(size);
   const toggleLanguage = () =>

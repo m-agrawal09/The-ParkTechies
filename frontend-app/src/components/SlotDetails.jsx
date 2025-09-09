@@ -6,7 +6,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "../styles/SlotDetails.css";
 
-
+// Custom maroon marker
 const customMarker = new L.Icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
@@ -128,7 +128,6 @@ export default function SlotDetails({
             </div>
           )}
         </div>
-        
 
         <div className="slot-map">
           {lat && lng ? (

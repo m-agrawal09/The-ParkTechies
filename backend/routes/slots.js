@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const ParkingSlot = require('../models/ParkingSlot');
-const authMiddleware = require('../middleware/auth'); // JWT auth
+const authMiddleware = require('../middleware/auth');
 
-// Get all parking slots (for all users)
+// Get all active parking slots
 router.get('/', async (req, res) => {
   try {
     const slots = await ParkingSlot.find({ active: true }).populate('host', 'name email');
@@ -16,26 +16,11 @@ router.get('/', async (req, res) => {
 
 // Create a new parking slot (host only)
 router.post('/', authMiddleware, async (req, res) => {
-  console.log('req.user:', req.user);
-  console.log('req.body:', req.body);
-
-  if (req.user.role !== 'host') return res.status(403).json({ error: 'Access denied' });
-
   try {
-    const { address, totalSlots, price, images, location } = req.body;
-
+    const { address, totalSlots, price, images, location, qrCode } = req.body;
     if (!address || !totalSlots || !price) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-
-    // Validate and set location with fallback if invalid/missing
-    const locationValue =
-      location && location.type === 'Point' && Array.isArray(location.coordinates) && location.coordinates.length === 2
-        ? location
-        : { type: 'Point', coordinates: [0, 0] };
-
-    // Ensure images is an array
-    const imagesArray = Array.isArray(images) ? images : [];
 
     const newSlot = new ParkingSlot({
       host: req.user.userId,
@@ -43,38 +28,76 @@ router.post('/', authMiddleware, async (req, res) => {
       totalSlots,
       availableSlots: totalSlots,
       price,
-      images: imagesArray,
-      location: locationValue,
+      images: Array.isArray(images) ? images : [],
+      qrCode: qrCode || "", // 👈 save qrCode if provided
+      location: location || { type: 'Point', coordinates: [0, 0] },
     });
 
     await newSlot.save();
-
     res.status(201).json({ message: 'Parking slot created', slot: newSlot });
   } catch (err) {
     console.error('Slot creation error:', err);
-    res.status(500).json({ error: err.message || 'Failed to create slot' });
+    res.status(500).json({ error: 'Failed to create slot' });
   }
 });
 
-// Delete a parking slot by ID (host only)
-router.delete('/:id', authMiddleware, async (req, res) => {
-  console.log("DELETE request received for slot ID:", req.params.id);
+// Update a parking slot (host or admin)
+router.put('/:id', authMiddleware, async (req, res) => {
+  console.log("Incoming PUT request for ID:", req.params.id);
   try {
     const slot = await ParkingSlot.findById(req.params.id);
-    if (!slot) {
-      return res.status(404).json({ error: 'Slot not found' });
+    if (!slot) return res.status(404).json({ error: 'Slot not found' });
+
+    // Only host who owns the slot or admin can edit
+    if (slot.host.toString() !== req.user.userId && req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Not authorized' });
     }
 
-    if (slot.host.toString() !== req.user.userId) {
-      return res.status(403).json({ error: 'Access denied' });
-    }
+    // Update fields if they exist in request
+    const {
+      address,
+      totalSlots,
+      availableSlots,
+      price,
+      images,
+      active,
+      availability,
+      location,
+      qrCode, // 👈 include qrCode
+    } = req.body;
 
-    // Replace slot.remove() with deleteOne()
-    await slot.deleteOne();
+    if (address !== undefined) slot.address = address;
+    if (totalSlots !== undefined) slot.totalSlots = totalSlots;
+    if (availableSlots !== undefined) slot.availableSlots = availableSlots;
+    if (price !== undefined) slot.price = price;
+    if (images !== undefined) slot.images = images;
+    if (qrCode !== undefined) slot.qrCode = qrCode; // 👈 update qrCode
+    if (active !== undefined) slot.active = active;
+    if (availability !== undefined) slot.availability = availability;
+    if (location !== undefined) slot.location = location;
 
-    res.status(200).json({ message: 'Slot deleted successfully' });
+    await slot.save();
+    res.json({ message: 'Slot updated', slot });
   } catch (err) {
-    console.error('Delete slot error:', err);
+    console.error(err);
+    res.status(500).json({ error: 'Update failed' });
+  }
+});
+
+// Delete a parking slot (host only)
+router.delete('/:id', authMiddleware, async (req, res) => {
+  try {
+    const slot = await ParkingSlot.findById(req.params.id);
+    if (!slot) return res.status(404).json({ error: 'Slot not found' });
+
+    if (String(slot.host) !== req.user.userId) {
+      return res.status(403).json({ error: 'Not authorized to delete this slot' });
+    }
+
+    await slot.deleteOne();
+    res.json({ message: 'Slot deleted successfully' });
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to delete slot' });
   }
 });

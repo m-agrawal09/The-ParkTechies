@@ -3,8 +3,8 @@ import axios from "axios";
 import HostDashboard from "./HostDashboard";
 import UserDashboard from "./UserDashboard";
 import Layout from "./Layout";
-import "../styles/global.css";  
-import "../styles/AuthPage.css"; 
+import "../styles/global.css";   // Global variables
+import "../styles/AuthPage.css"; // Page-specific styles
 
 const backendURL = "http://localhost:5000/api/auth";
 
