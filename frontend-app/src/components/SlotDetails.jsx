@@ -5,6 +5,7 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "../styles/SlotDetails.css";
+import { useLanguage } from "./LanguageContext";
 
 // Custom maroon marker
 const customMarker = new L.Icon({
@@ -25,12 +26,67 @@ export default function SlotDetails({
   setBookingDetails,
   bookingMessage,
 }) {
+  const { language } = useLanguage();
+
+  const texts = {
+    en: {
+      backButton: "← Back to slots",
+      slotDetails: "Slot Details",
+      address: "Address",
+      totalSlots: "Total Slots",
+      availableSlots: "Available Slots",
+      pricePerSlot: "Price per Slot",
+      host: "Host",
+      phone: "Phone",
+      noLocationData: "No location data available",
+      bookingSectionTitle: "Booking",
+      paymentTitle: "Payment",
+      paymentInstruction: "Scan the host's QR code below to initiate payment:",
+      enterPaymentRFID: "Enter Payment RFID:",
+      paymentPlaceholder: "Enter RFID code here",
+      paymentBtn: "Submit Payment",
+      bookingSuccessTitle: "Booking Successful!",
+      bookingSuccessMessage:
+        "Your booking has been confirmed and a confirmation email has been sent.",
+      bookingSuccessBtn: "OK",
+      invalidBookingDetails:
+        "Please enter valid booking details within allowed ranges",
+      acceptTermsAlert: "You must accept the Terms and Conditions",
+      enterRFIDAlert: "Please enter your payment RFID",
+    },
+    hi: {
+      backButton: "← स्लॉट पर वापस जाएं",
+      slotDetails: "स्लॉट विवरण",
+      address: "पता",
+      totalSlots: "कुल स्लॉट",
+      availableSlots: "उपलब्ध स्लॉट",
+      pricePerSlot: "प्रति स्लॉट कीमत",
+      host: "मेज़बान",
+      phone: "फोन",
+      noLocationData: "स्थान डेटा उपलब्ध नहीं है",
+      bookingSectionTitle: "बुकिंग",
+      paymentTitle: "भुगतान",
+      paymentInstruction: "भुगतान शुरू करने के लिए मेज़बान का क्यूआर कोड स्कैन करें:",
+      enterPaymentRFID: "भुगतान RFID दर्ज करें:",
+      paymentPlaceholder: "यहाँ RFID कोड दर्ज करें",
+      paymentBtn: "भुगतान सबमिट करें",
+      bookingSuccessTitle: "बुकिंग सफल!",
+      bookingSuccessMessage:
+        "आपकी बुकिंग पुष्टि हो गई है और एक पुष्टिकरण ईमेल भेजा गया है।",
+      bookingSuccessBtn: "ठीक है",
+      invalidBookingDetails: "कृपया सीमित रेंज में मान्य बुकिंग विवरण दर्ज करें",
+      acceptTermsAlert: "आपको नियम और शर्तें स्वीकार करनी होंगी",
+      enterRFIDAlert: "कृपया अपना भुगतान RFID दर्ज करें",
+    },
+  };
+
+  const t = texts[language];
   const [step, setStep] = useState(1);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handlePaymentSubmit = async () => {
     if (!bookingDetails.paymentRFID) {
-      alert("Please enter your payment RFID");
+      alert(t.enterRFIDAlert);
       return;
     }
     try {
@@ -47,8 +103,7 @@ export default function SlotDetails({
             slot.price *
             bookingDetails.noOfSlots *
             (Math.ceil(
-              (new Date(bookingDetails.toTime) -
-                new Date(bookingDetails.fromTime)) /
+              (new Date(bookingDetails.toTime) - new Date(bookingDetails.fromTime)) /
                 (24 * 60 * 60 * 1000) +
                 1
             )),
@@ -57,7 +112,7 @@ export default function SlotDetails({
       );
       setShowSuccessModal(true);
     } catch (err) {
-      alert(err.response?.data.error || "Payment verification failed.");
+      alert(err.response?.data.error || `${t.paymentBtn} ${t.paymentBtn} असफल रहा।`);
     }
   };
 
@@ -79,38 +134,38 @@ export default function SlotDetails({
   return (
     <div className="slotdetails-wrapper">
       <button className="back-button" onClick={onBack}>
-        ← Back to slots
+        {t.backButton}
       </button>
 
       <div className="slot-details">
         <div className="slot-info">
-          <h2>Slot Details</h2>
+          <h2>{t.slotDetails}</h2>
           <table className="details-table">
             <tbody>
               <tr>
-                <td>Address</td>
+                <td>{t.address}</td>
                 <td>{slot.address}</td>
               </tr>
               <tr>
-                <td>Total Slots</td>
+                <td>{t.totalSlots}</td>
                 <td>{slot.totalSlots}</td>
               </tr>
               <tr>
-                <td>Available Slots</td>
+                <td>{t.availableSlots}</td>
                 <td>{slot.availableSlots}</td>
               </tr>
               <tr>
-                <td>Price per Slot</td>
+                <td>{t.pricePerSlot}</td>
                 <td>₹{slot.price}</td>
               </tr>
               <tr>
-                <td>Host</td>
+                <td>{t.host}</td>
                 <td>
                   {slot.host?.name} ({slot.host?.email})
                 </td>
               </tr>
               <tr>
-                <td>Phone</td>
+                <td>{t.phone}</td>
                 <td>{slot.host?.phone}</td>
               </tr>
             </tbody>
@@ -141,7 +196,7 @@ export default function SlotDetails({
               </Marker>
             </MapContainer>
           ) : (
-            <p>No location data available</p>
+            <p>{t.noLocationData}</p>
           )}
         </div>
       </div>
@@ -160,7 +215,7 @@ export default function SlotDetails({
                 !bookingDetails.fromTime ||
                 !bookingDetails.toTime
               ) {
-                alert("Please enter valid booking details within allowed ranges");
+                alert(t.invalidBookingDetails);
                 return;
               }
               setStep(2);
@@ -179,7 +234,7 @@ export default function SlotDetails({
               if (bookingDetails.acceptedTerms) {
                 setStep(3);
               } else {
-                alert("You must accept the Terms and Conditions");
+                alert(t.acceptTermsAlert);
               }
             }}
             errorMessage={bookingMessage}
@@ -188,8 +243,8 @@ export default function SlotDetails({
 
         {step === 3 && (
           <div className="payment-section">
-            <h3>Payment</h3>
-            <p>Scan the host's QR code below to initiate payment:</p>
+            <h3>{t.paymentTitle}</h3>
+            <p>{t.paymentInstruction}</p>
             {slot.qrCode && (
               <div className="slot-qrcode">
                 <img
@@ -200,7 +255,7 @@ export default function SlotDetails({
               </div>
             )}
             <label>
-              Enter Payment RFID:
+              {t.enterPaymentRFID}
               <input
                 type="text"
                 name="paymentRFID"
@@ -211,12 +266,12 @@ export default function SlotDetails({
                     paymentRFID: e.target.value,
                   })
                 }
-                placeholder="Enter RFID code here"
+                placeholder={t.paymentPlaceholder}
                 className="rfid-input"
               />
             </label>
             <button className="payment-btn" onClick={handlePaymentSubmit}>
-              Submit Payment
+              {t.paymentBtn}
             </button>
           </div>
         )}
@@ -225,9 +280,11 @@ export default function SlotDetails({
       {showSuccessModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h2>Booking Successful!</h2>
-            <p>Your booking has been confirmed and a confirmation email has been sent.</p>
-            <button className="success-btn" onClick={resetBooking}>OK</button>
+            <h2>{t.bookingSuccessTitle}</h2>
+            <p>{t.bookingSuccessMessage}</p>
+            <button className="success-btn" onClick={resetBooking}>
+              {t.bookingSuccessBtn}
+            </button>
           </div>
         </div>
       )}

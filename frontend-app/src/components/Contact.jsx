@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/Contact.css";
-import Layout from "./Layout";
+import Layout from "./Home_Layout";
 import { useLanguage } from "./LanguageContext";
 
 export default function Contact() {

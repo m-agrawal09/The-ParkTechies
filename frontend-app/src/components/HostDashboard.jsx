@@ -2,11 +2,101 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LocationPicker from "./LocationPicker";
 import "../styles/HostDashboard.css";
+import { useLanguage } from "./LanguageContext";
 
 const backendURL = "http://localhost:5000/api/slots";
 const uploadURL = "http://localhost:5000/api/upload";
 
 export default function HostDashboard({ userName }) {
+  const { language } = useLanguage();
+
+  const texts = {
+    en: {
+      hostDashboard: "Host Dashboard",
+      welcome: "Welcome",
+      addSlot: "Add Parking Slot",
+      addressPlaceholder: "Address",
+      totalSlotsPlaceholder: "Total Slots",
+      pricePlaceholder: "Price per Slot",
+      selectLocation: "Select Location on Map",
+      uploadImages: "Upload Images",
+      uploadQRCode: "Upload QR Code",
+      uploadingFile: "Uploading file...",
+      imageUploadFailed: "Image upload failed",
+      qrUploadFailed: "QR code upload failed",
+      addSlotBtn: "Add Slot",
+      slotAdded: "Parking slot added successfully!",
+      slotDeleteConfirm: "Are you sure you want to delete this slot?",
+      slotDeleted: "Slot deleted successfully!",
+      slotDeleteFailed: "Failed to delete slot",
+      slotUpdateSuccess: "Slot updated successfully!",
+      slotUpdateFailed: "Update failed",
+      noSlots: "No slots added yet.",
+      yourParkingSlots: "Your Parking Slots",
+      totalSlotsLabel: "Total Slots:",
+      availableSlotsLabel: "Available Slots:",
+      pricePerSlotLabel: "Price per Slot:",
+      editBtn: "Edit",
+      deleteBtn: "Delete",
+      editSlotTitle: "Edit Slot",
+      activeLabel: "Active:",
+      qrCodeOptional: "QR Code (optional)",
+      saveBtn: "Save",
+      cancelBtn: "Cancel",
+      invalidLocation: "Please select a valid location on the map.",
+      invalidTotalSlots: "Please enter a valid positive number for total slots.",
+      invalidPrice: "Please enter a valid positive price.",
+      addressEmpty: "Address cannot be empty.",
+      failedAddSlot: "Failed to add slot. Please try again.",
+      uploading: "Uploading file...",
+      errorTextClass: "error-text",
+      successTextClass: "success-text",
+    },
+    hi: {
+      hostDashboard: "मेज़बान डैशबोर्ड",
+      welcome: "स्वागत है",
+      addSlot: "पार्किंग स्लॉट जोड़ें",
+      addressPlaceholder: "पता",
+      totalSlotsPlaceholder: "संपूर्ण स्लॉट",
+      pricePlaceholder: "प्रति स्लॉट कीमत",
+      selectLocation: "मैप पर स्थान चुनें",
+      uploadImages: "छवियां अपलोड करें",
+      uploadQRCode: "क्यूआर कोड अपलोड करें",
+      uploadingFile: "फ़ाइल अपलोड हो रही है...",
+      imageUploadFailed: "छवि अपलोड विफल",
+      qrUploadFailed: "क्यूआर कोड अपलोड विफल",
+      addSlotBtn: "स्लॉट जोड़ें",
+      slotAdded: "पार्किंग स्लॉट सफलतापूर्वक जोड़ा गया!",
+      slotDeleteConfirm: "क्या आप सुनिश्चित हैं कि आप इस स्लॉट को हटाना चाहते हैं?",
+      slotDeleted: "स्लॉट सफलतापूर्वक हटा दिया गया!",
+      slotDeleteFailed: "स्लॉट हटाना विफल रहा",
+      slotUpdateSuccess: "स्लॉट सफलतापूर्वक अपडेट किया गया!",
+      slotUpdateFailed: "अपडेट विफल रहा",
+      noSlots: "कोई स्लॉट अभी तक नहीं जोड़ा गया है।",
+      yourParkingSlots: "आपके पार्किंग स्लॉट",
+      totalSlotsLabel: "संपूर्ण स्लॉट:",
+      availableSlotsLabel: "उपलब्ध स्लॉट:",
+      pricePerSlotLabel: "प्रति स्लॉट कीमत:",
+      editBtn: "संपादित करें",
+      deleteBtn: "हटाएं",
+      editSlotTitle: "स्लॉट संपादित करें",
+      activeLabel: "सक्रिय:",
+      qrCodeOptional: "क्यूआर कोड (वैकल्पिक)",
+      saveBtn: "सहेजें",
+      cancelBtn: "रद्द करें",
+      invalidLocation: "कृपया मान्य स्थान चुने।",
+      invalidTotalSlots: "कृपया सकारात्मक संख्या दर्ज करें।",
+      invalidPrice: "कृपया सकारात्मक कीमत दर्ज करें।",
+      addressEmpty: "पता खाली नहीं हो सकता।",
+      failedAddSlot: "स्लॉट जोड़ना विफल रहा। कृपया पुनः प्रयास करें।",
+      uploading: "फ़ाइल अपलोड हो रही है...",
+      errorTextClass: "error-text",
+      successTextClass: "success-text",
+    },
+  };
+
+  const t = texts[language];
+
   const [slots, setSlots] = useState([]);
   const [formData, setFormData] = useState({
     address: "",
@@ -40,9 +130,7 @@ export default function HostDashboard({ userName }) {
         const res = await axios.get(backendURL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const mySlots = res.data.filter(
-          (slot) => slot.host && slot.host.name === userName
-        );
+        const mySlots = res.data.filter((slot) => slot.host && slot.host.name === userName);
         setSlots(mySlots);
       } catch (err) {
         console.error("Fetch slots error:", err.response || err);
@@ -51,12 +139,10 @@ export default function HostDashboard({ userName }) {
     fetchSlots();
   }, [userName, token]);
 
-  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Image upload
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -78,7 +164,7 @@ export default function HostDashboard({ userName }) {
       }));
     } catch (err) {
       console.error("Upload failed", err.response || err);
-      setUploadError("Image upload failed");
+      setUploadError(t.imageUploadFailed);
     } finally {
       setUploading(false);
     }
@@ -91,7 +177,6 @@ export default function HostDashboard({ userName }) {
     }));
   };
 
-  // QR code upload
   const handleQRCodeUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -113,52 +198,44 @@ export default function HostDashboard({ userName }) {
       }));
     } catch (err) {
       console.error("QR upload failed", err.response || err);
-      setUploadError("QR code upload failed");
+      setUploadError(t.qrUploadFailed);
     } finally {
       setUploading(false);
     }
   };
 
-  // Updated handleAddSlot with validation and error handling
   const handleAddSlot = async (e) => {
     e.preventDefault();
     setMessage("");
 
-    // Validate location presence and coordinates
     if (
       !location ||
       !location.coordinates ||
       !Array.isArray(location.coordinates) ||
       location.coordinates.length !== 2 ||
-      location.coordinates.some(
-        (coord) => typeof coord !== "number" || isNaN(coord)
-      )
+      location.coordinates.some((coord) => typeof coord !== "number" || isNaN(coord))
     ) {
-      setMessage("Please select a valid location on the map.");
+      setMessage(t.invalidLocation);
       return;
     }
 
-    // Validate totalSlots as positive number
     const totalSlotsNum = Number(formData.totalSlots);
     if (!totalSlotsNum || totalSlotsNum <= 0) {
-      setMessage("Please enter a valid positive number for total slots.");
+      setMessage(t.invalidTotalSlots);
       return;
     }
 
-    // Validate price as positive number
     const priceNum = Number(formData.price);
     if (!priceNum || priceNum <= 0) {
-      setMessage("Please enter a valid positive price.");
+      setMessage(t.invalidPrice);
       return;
     }
 
-    // Trim address to avoid blank spaces
     if (!formData.address.trim()) {
-      setMessage("Address cannot be empty.");
+      setMessage(t.addressEmpty);
       return;
     }
 
-    // Prepare the slotData for backend
     const slotData = {
       address: formData.address.trim(),
       totalSlots: totalSlotsNum,
@@ -176,8 +253,6 @@ export default function HostDashboard({ userName }) {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSlots((prev) => [...prev, res.data.slot]);
-
-      // Reset form and location
       setFormData({
         address: "",
         totalSlots: "",
@@ -186,25 +261,24 @@ export default function HostDashboard({ userName }) {
         qrCode: "",
       });
       setLocation(null);
-
-      setMessage("Parking slot added successfully!");
+      setMessage(t.slotAdded);
     } catch (err) {
       console.error("Slot creation error:", err.response || err);
-      setMessage(err.response?.data?.error || "Failed to add slot. Please try again.");
+      setMessage(err.response?.data?.error || t.failedAddSlot);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this slot?")) return;
+    if (!window.confirm(t.slotDeleteConfirm)) return;
     try {
       await axios.delete(`${backendURL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSlots((prev) => prev.filter((slot) => slot._id !== id));
-      setMessage("Slot deleted successfully!");
+      setMessage(t.slotDeleted);
     } catch (err) {
       console.error(err.response || err);
-      setMessage(err.response?.data.error || "Failed to delete slot");
+      setMessage(err.response?.data.error || t.slotDeleteFailed);
     }
   };
 
@@ -245,28 +319,30 @@ export default function HostDashboard({ userName }) {
       setSlots((prev) =>
         prev.map((s) => (s._id === res.data.slot._id ? res.data.slot : s))
       );
-      setMessage("Slot updated successfully!");
+      setMessage(t.slotUpdateSuccess);
       setEditingSlotId(null);
     } catch (err) {
       console.error(err.response || err);
-      setMessage(err.response?.data.error || "Update failed");
+      setMessage(err.response?.data.error || t.slotUpdateFailed);
     }
   };
 
   return (
     <div className="host-dashboard">
-      <h2>Host Dashboard</h2>
-      <p>Welcome, {userName}</p>
+      <h2>{t.hostDashboard}</h2>
+      <p>
+        {t.welcome}, {userName}
+      </p>
 
       {/* Add Slot Form */}
-      <h3 className="section-title">Add Parking Slot</h3>
+      <h3 className="section-title">{t.addSlot}</h3>
       <form onSubmit={handleAddSlot} className="slot-form">
         <input
           type="text"
           name="address"
           value={formData.address}
           onChange={handleChange}
-          placeholder="Address"
+          placeholder={t.addressPlaceholder}
           required
           className="form-input"
         />
@@ -275,7 +351,7 @@ export default function HostDashboard({ userName }) {
           name="totalSlots"
           value={formData.totalSlots}
           onChange={handleChange}
-          placeholder="Total Slots"
+          placeholder={t.totalSlotsPlaceholder}
           required
           className="form-input"
         />
@@ -284,17 +360,17 @@ export default function HostDashboard({ userName }) {
           name="price"
           value={formData.price}
           onChange={handleChange}
-          placeholder="Price per Slot"
+          placeholder={t.pricePlaceholder}
           required
           className="form-input"
         />
 
-        <label>Select Location on Map</label>
+        <label>{t.selectLocation}</label>
         <LocationPicker onLocationChange={setLocation} />
 
         {/* Upload Section */}
         <div className="upload-section">
-          <label className="form-label upload-label">Upload Images</label>
+          <label className="form-label upload-label">{t.uploadImages}</label>
           <input type="file" accept="image/*" onChange={handleFileChange} />
           <div className="uploaded-images">
             {formData.images.map((imgUrl, idx) => (
@@ -317,7 +393,7 @@ export default function HostDashboard({ userName }) {
         </div>
 
         <div className="upload-section">
-          <label className="form-label upload-label">Upload QR Code</label>
+          <label className="form-label upload-label">{t.uploadQRCode}</label>
           <input type="file" accept="image/*" onChange={handleQRCodeUpload} />
           {formData.qrCode && (
             <div className="uploaded-qrcode">
@@ -336,32 +412,38 @@ export default function HostDashboard({ userName }) {
           )}
         </div>
 
-        {uploading && <p>Uploading file...</p>}
-        {uploadError && <p className="error-text">{uploadError}</p>}
+        {uploading && <p>{t.uploadingFile}</p>}
+        {uploadError && <p className={t.errorTextClass}>{uploadError}</p>}
 
         <button type="submit" className="submit-btn">
-          Add Slot
+          {t.addSlotBtn}
         </button>
       </form>
 
       {message && (
-        <p className={message.includes("Failed") ? "error-text" : "success-text"}>
+        <p className={message.includes("Failed") ? t.errorTextClass : t.successTextClass}>
           {message}
         </p>
       )}
 
       {/* Slot List */}
-      <h3 className="section-title">Your Parking Slots</h3>
+      <h3 className="section-title">{t.yourParkingSlots}</h3>
       {slots.length === 0 ? (
-        <p>No slots added yet.</p>
+        <p>{t.noSlots}</p>
       ) : (
         <ul className="slot-list">
           {slots.map((slot) => (
             <li key={slot._id} className="slot-item">
               <h4>{slot.address}</h4>
-              <p>Total Slots: {slot.totalSlots}</p>
-              <p>Available Slots: {slot.availableSlots}</p>
-              <p>Price per Slot: ₹{slot.price}</p>
+              <p>
+                {t.totalSlotsLabel} {slot.totalSlots}
+              </p>
+              <p>
+                {t.availableSlotsLabel} {slot.availableSlots}
+              </p>
+              <p>
+                {t.pricePerSlotLabel} ₹{slot.price}
+              </p>
 
               {slot.images?.length > 0 && (
                 <div className="slot-images">
@@ -377,10 +459,10 @@ export default function HostDashboard({ userName }) {
               )}
 
               <button onClick={() => handleEditClick(slot)} className="edit-btn">
-                Edit
+                {t.editBtn}
               </button>
               <button onClick={() => handleDelete(slot._id)} className="delete-btn">
-                Delete
+                {t.deleteBtn}
               </button>
             </li>
           ))}
@@ -395,31 +477,31 @@ export default function HostDashboard({ userName }) {
               name="address"
               value={editForm.address}
               onChange={handleEditChange}
-              placeholder="Address"
+              placeholder={t.addressPlaceholder}
             />
             <input
               name="totalSlots"
               type="number"
               value={editForm.totalSlots}
               onChange={handleEditChange}
-              placeholder="Total Slots"
+              placeholder={t.totalSlotsPlaceholder}
             />
             <input
               name="availableSlots"
               type="number"
               value={editForm.availableSlots}
               onChange={handleEditChange}
-              placeholder="Available Slots"
+              placeholder={t.availableSlotsLabel}
             />
             <input
               name="price"
               type="number"
               value={editForm.price}
               onChange={handleEditChange}
-              placeholder="Price"
+              placeholder={t.pricePlaceholder}
             />
             <label>
-              Active:
+              {t.activeLabel}
               <input
                 name="active"
                 type="checkbox"
@@ -428,7 +510,7 @@ export default function HostDashboard({ userName }) {
               />
             </label>
 
-            <label>QR Code (optional)</label>
+            <label>{t.qrCodeOptional}</label>
             {editForm.qrCode && (
               <div className="uploaded-qrcode">
                 <img
@@ -446,9 +528,9 @@ export default function HostDashboard({ userName }) {
             )}
             <input type="file" accept="image/*" onChange={handleQRCodeUpload} />
 
-            <button type="submit">Save</button>
+            <button type="submit">{t.saveBtn}</button>
             <button type="button" onClick={() => setEditingSlotId(null)}>
-              Cancel
+              {t.cancelBtn}
             </button>
           </form>
         </div>

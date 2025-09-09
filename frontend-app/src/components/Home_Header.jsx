@@ -19,7 +19,7 @@ const Header = ({ logoSrc }) => {
       title: "देवोतीईज : वाहन पार्किंग सेवा",
       home: "होम",
       contact: "संपर्क करें",
-      langLabel: "हि",
+      langLabel: "Hi",
     },
   };
 
@@ -29,7 +29,7 @@ const Header = ({ logoSrc }) => {
     <header className="app-header">
       <div className="header-left">
         <img
-          src={logoSrc || "/Logo.png"}
+          src="/Logo.png"
           alt="Logo"
           className="header-logo"
           style={{ width: "20%", height: "auto" }}

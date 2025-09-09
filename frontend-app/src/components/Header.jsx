@@ -42,6 +42,10 @@ const Header = ({ logoSrc }) => {
         <button className="lang-switcher" onClick={toggleLanguage}>
           {language === "en" ? "En" : "Hi"}
         </button>
+
+        <button onClick={() => (window.location.href = "/")}>
+          {language === "en" ? "LogOut" : "लॉग आउट"}
+        </button>
       </div>
     </header>
   );

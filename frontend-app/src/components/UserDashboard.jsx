@@ -5,10 +5,50 @@ import SlotDetails from "./SlotDetails";
 import Modal from "./Modal";
 import MyBookings from "./MyBookings";
 import "../styles/UserDashboard.css";
+import { useLanguage } from "./LanguageContext";
 
 const backendURL = "http://localhost:5000/api/slots";
 
 export default function UserDashboard({ userName }) {
+  const { language } = useLanguage();
+
+  const texts = {
+    en: {
+      loadingSlots: "Loading available parking slots...",
+      loadError: "Failed to load slots.",
+      userDashboard: "User Dashboard",
+      welcome: "Welcome",
+      availableSlots: "Available Slots",
+      myBookings: "My Bookings",
+      noAvailableSlots: "No available parking slots found.",
+      backToSlots: "Back to Slots",
+      bookingSuccessPrefix: "Booking successful! Reference ID: ",
+      bookingFailed: "Booking failed",
+      enterValidSlots: (max) => `Please enter valid number of slots (1 to ${max})`,
+      enterFromToTimes: "Please enter both from and to times.",
+      bookingConfirmationEmail: "Booking confirmation email sent successfully!",
+      bookingErrorColor: { color: "red" },
+    },
+    hi: {
+      loadingSlots: "उपलब्ध पार्किंग स्लॉट लोड हो रहे हैं...",
+      loadError: "स्लॉट लोड करने में विफल।",
+      userDashboard: "उपयोगकर्ता डैशबोर्ड",
+      welcome: "स्वागत है",
+      availableSlots: "उपलब्ध स्लॉट",
+      myBookings: "मेरी बुकिंग्स",
+      noAvailableSlots: "कोई उपलब्ध पार्किंग स्लॉट नहीं मिला।",
+      backToSlots: "स्लॉट्स पर वापस जाएं",
+      bookingSuccessPrefix: "बुकिंग सफल! संदर्भ आईडी: ",
+      bookingFailed: "बुकिंग विफल",
+      enterValidSlots: (max) => `कृपया वैध स्लॉट संख्या दर्ज करें (1 से ${max} तक)`,
+      enterFromToTimes: "कृपया दोनों शुरू और समाप्ति समय दर्ज करें।",
+      bookingConfirmationEmail: "बुकिंग पुष्टिकरण ईमेल सफलतापूर्वक भेजा गया!",
+      bookingErrorColor: { color: "red" },
+    },
+  };
+
+  const t = texts[language];
+
   const [slots, setSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -35,12 +75,12 @@ export default function UserDashboard({ userName }) {
         setSlots(res.data.filter((slot) => slot.active && slot.availableSlots > 0));
         setLoading(false);
       } catch (err) {
-        setError("Failed to load slots.");
+        setError(t.loadError);
         setLoading(false);
       }
     }
     fetchSlots();
-  }, []);
+  }, [t.loadError]);
 
   const handleBookingSubmit = async (e) => {
     e.preventDefault();
@@ -51,13 +91,11 @@ export default function UserDashboard({ userName }) {
       bookingDetails.noOfSlots < 1 ||
       bookingDetails.noOfSlots > selectedSlot.availableSlots
     ) {
-      setBookingMessage(
-        `Please enter valid number of slots (1 to ${selectedSlot.availableSlots})`
-      );
+      setBookingMessage(t.enterValidSlots(selectedSlot.availableSlots));
       return;
     }
     if (!bookingDetails.fromTime || !bookingDetails.toTime) {
-      setBookingMessage("Please enter both from and to times.");
+      setBookingMessage(t.enterFromToTimes);
       return;
     }
 
@@ -74,9 +112,9 @@ export default function UserDashboard({ userName }) {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      setBookingMessage("Booking successful! Reference ID: " + res.data.booking._id);
+      setBookingMessage(t.bookingSuccessPrefix + res.data.booking._id);
       setShowBookingForm(false);
-      setModalMessage("Booking confirmation email sent successfully!");
+      setModalMessage(t.bookingConfirmationEmail);
       setShowSuccessModal(true);
 
       // Refresh slot availability
@@ -87,7 +125,7 @@ export default function UserDashboard({ userName }) {
       const updatedSlot = updatedSlots.find((slot) => slot._id === selectedSlot._id);
       setSelectedSlot(updatedSlot || null);
     } catch (err) {
-      setBookingMessage(err.response?.data.error || "Booking failed");
+      setBookingMessage(err.response?.data.error || t.bookingFailed);
     }
   };
 
@@ -98,8 +136,13 @@ export default function UserDashboard({ userName }) {
     setBookingDetails({ fromTime: "", toTime: "", noOfSlots: 1 });
   };
 
-  if (loading) return <p>Loading available parking slots...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <p>{t.loadingSlots}</p>;
+  if (error)
+    return (
+      <p style={t.bookingErrorColor}>
+        {error}
+      </p>
+    );
 
   if (!selectedSlot) {
     return (
@@ -108,8 +151,10 @@ export default function UserDashboard({ userName }) {
           <Modal message={modalMessage} onClose={() => setShowSuccessModal(false)} />
         )}
 
-        <h2 className="dashboard-title">User Dashboard</h2>
-        <p className="dashboard-welcome">Welcome, {userName}!</p>
+        <h2 className="dashboard-title">{t.userDashboard}</h2>
+        <p className="dashboard-welcome">
+          {t.welcome}, {userName}!
+        </p>
 
         <div className="dashboard-nav">
           <button
@@ -117,22 +162,22 @@ export default function UserDashboard({ userName }) {
             disabled={view === "slots"}
             className={`nav-btn ${view === "slots" ? "active" : ""}`}
           >
-            Available Slots
+            {t.availableSlots}
           </button>
           <button
             onClick={() => setView("bookings")}
             disabled={view === "bookings"}
             className={`nav-btn ${view === "bookings" ? "active" : ""}`}
           >
-            My Bookings
+            {t.myBookings}
           </button>
         </div>
 
         {view === "slots" && (
           <>
-            <h3 className="section-title">Available Parking Slots</h3>
+            <h3 className="section-title">{t.availableSlots}</h3>
             {slots.length === 0 ? (
-              <p>No available parking slots found.</p>
+              <p>{t.noAvailableSlots}</p>
             ) : (
               <SlotList slots={slots} onSelect={setSelectedSlot} />
             )}
@@ -143,7 +188,7 @@ export default function UserDashboard({ userName }) {
           <>
             <MyBookings />
             <button onClick={() => setView("slots")} className="back-btn">
-              Back to Slots
+              {t.backToSlots}
             </button>
           </>
         )}
