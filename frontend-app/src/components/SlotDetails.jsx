@@ -128,6 +128,7 @@ export default function SlotDetails({
             </div>
           )}
         </div>
+        
 
         <div className="slot-map">
           {lat && lng ? (
