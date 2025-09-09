@@ -1,17 +1,16 @@
 :root {
   --bg-color: #f6f4f1;
-  --primary-color: #b22222; /* firebrick red */
-  --primary-hover: #800000; /* maroon */
+  --primary-color: #b22222; 
+  --primary-hover: #800000; 
   --text-dark: #333333;
   --text-light: #555;
-  --card-bg: rgba(255, 255, 255, 0.9); /* semi-opaque white */
+  --card-bg: rgba(255, 255, 255, 0.9); 
   --border-color: #ccc;
   --accent-color: #b22222;
   --danger-color: #dc3545;
   --input-bg: #f5f5f5;
 }
 
-/* Reset */
 body {
   margin: 0;
   font-family: Arial, sans-serif;

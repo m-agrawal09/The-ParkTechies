@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import BookingForm from "./BookingForm";
 import BookingInvoice from "./BookingInvoice";
-import QRCode from "react-qr-code";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "../styles/SlotDetails.css";
 
 
-// Custom maroon marker
 const customMarker = new L.Icon({
   iconUrl:
     "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png",
@@ -79,7 +77,7 @@ export default function SlotDetails({
   const [lng, lat] = slot.location?.coordinates || [null, null];
 
   return (
-    <>
+    <div className="slotdetails-wrapper">
       <button className="back-button" onClick={onBack}>
         ← Back to slots
       </button>
@@ -87,11 +85,36 @@ export default function SlotDetails({
       <div className="slot-details">
         <div className="slot-info">
           <h2>Slot Details</h2>
-          <h3>{slot.address}</h3>
-          <p><strong>Total Slots:</strong> {slot.totalSlots}</p>
-          <p><strong>Available Slots:</strong> {slot.availableSlots}</p>
-          <p><strong>Price per Slot:</strong> ₹{slot.price}</p>
-          <p><strong>Host:</strong> {slot.host?.name} ({slot.host?.email})</p>
+          <table className="details-table">
+            <tbody>
+              <tr>
+                <td>Address</td>
+                <td>{slot.address}</td>
+              </tr>
+              <tr>
+                <td>Total Slots</td>
+                <td>{slot.totalSlots}</td>
+              </tr>
+              <tr>
+                <td>Available Slots</td>
+                <td>{slot.availableSlots}</td>
+              </tr>
+              <tr>
+                <td>Price per Slot</td>
+                <td>₹{slot.price}</td>
+              </tr>
+              <tr>
+                <td>Host</td>
+                <td>
+                  {slot.host?.name} ({slot.host?.email})
+                </td>
+              </tr>
+              <tr>
+                <td>Phone</td>
+                <td>{slot.host?.phone}</td>
+              </tr>
+            </tbody>
+          </table>
 
           {slot.images?.length > 0 && (
             <div className="slot-images">
@@ -100,7 +123,6 @@ export default function SlotDetails({
                   key={i}
                   src={`http://localhost:5000${img}`}
                   alt={`Parking slot ${i + 1}`}
-
                 />
               ))}
             </div>
@@ -124,70 +146,81 @@ export default function SlotDetails({
         </div>
       </div>
 
-      {/* Booking steps remain unchanged */}
-      {step === 1 && (
-        <BookingForm
-          bookingDetails={bookingDetails}
-          setBookingDetails={setBookingDetails}
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (
-              bookingDetails.noOfSlots < 1 ||
-              bookingDetails.noOfSlots > slot.availableSlots ||
-              !bookingDetails.fromTime ||
-              !bookingDetails.toTime
-            ) {
-              alert("Please enter valid booking details within allowed ranges");
-              return;
-            }
-            setStep(2);
-          }}
-          bookingMessage={bookingMessage}
-          maxSlots={slot.availableSlots}
-        />
-      )}
-
-      {step === 2 && (
-        <BookingInvoice
-          bookingDetails={bookingDetails}
-          setBookingDetails={setBookingDetails}
-          slotPrice={slot.price}
-          onConfirm={() => {
-            if (bookingDetails.acceptedTerms) {
-              setStep(3);
-            } else {
-              alert("You must accept the Terms and Conditions");
-            }
-          }}
-          errorMessage={bookingMessage}
-        />
-      )}
-
-      {step === 3 && (
-        <div className="payment-section">
-          <h3>Payment</h3>
-          <p>Scan the host's QR code below to initiate payment:</p>
-          <div className="qr-wrapper">
-            <QRCode value={slot.host?.paymentQRCode || "default-qr-data"} size={150} />
-          </div>
-          <label>
-            Enter Payment RFID:
-            <input
-              type="text"
-              name="paymentRFID"
-              value={bookingDetails.paymentRFID || ""}
-              onChange={(e) =>
-                setBookingDetails({ ...bookingDetails, paymentRFID: e.target.value })
+      {/* Booking steps in separate section */}
+      <div className="booking-section">
+        {step === 1 && (
+          <BookingForm
+            bookingDetails={bookingDetails}
+            setBookingDetails={setBookingDetails}
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (
+                bookingDetails.noOfSlots < 1 ||
+                bookingDetails.noOfSlots > slot.availableSlots ||
+                !bookingDetails.fromTime ||
+                !bookingDetails.toTime
+              ) {
+                alert("Please enter valid booking details within allowed ranges");
+                return;
               }
-              placeholder="Enter RFID code here"
-              className="rfid-input"
-            />
-          </label>
-          <button className="payment-btn" onClick={handlePaymentSubmit}>
-            Submit Payment
-          </button>
-        </div>
-      )}
+              setStep(2);
+            }}
+            bookingMessage={bookingMessage}
+            maxSlots={slot.availableSlots}
+          />
+        )}
+
+        {step === 2 && (
+          <BookingInvoice
+            bookingDetails={bookingDetails}
+            setBookingDetails={setBookingDetails}
+            slotPrice={slot.price}
+            onConfirm={() => {
+              if (bookingDetails.acceptedTerms) {
+                setStep(3);
+              } else {
+                alert("You must accept the Terms and Conditions");
+              }
+            }}
+            errorMessage={bookingMessage}
+          />
+        )}
+
+        {step === 3 && (
+          <div className="payment-section">
+            <h3>Payment</h3>
+            <p>Scan the host's QR code below to initiate payment:</p>
+            {slot.qrCode && (
+              <div className="slot-qrcode">
+                <img
+                  src={`http://localhost:5000${slot.qrCode}`}
+                  alt="QR Code"
+                  className="qr-preview"
+                />
+              </div>
+            )}
+            <label>
+              Enter Payment RFID:
+              <input
+                type="text"
+                name="paymentRFID"
+                value={bookingDetails.paymentRFID || ""}
+                onChange={(e) =>
+                  setBookingDetails({
+                    ...bookingDetails,
+                    paymentRFID: e.target.value,
+                  })
+                }
+                placeholder="Enter RFID code here"
+                className="rfid-input"
+              />
+            </label>
+            <button className="payment-btn" onClick={handlePaymentSubmit}>
+              Submit Payment
+            </button>
+          </div>
+        )}
+      </div>
 
       {showSuccessModal && (
         <div className="modal-overlay">
@@ -198,6 +231,6 @@ export default function SlotDetails({
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

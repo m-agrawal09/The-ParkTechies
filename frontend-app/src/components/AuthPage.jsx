@@ -3,21 +3,35 @@ import axios from "axios";
 import HostDashboard from "./HostDashboard";
 import UserDashboard from "./UserDashboard";
 import Layout from "./Layout";
-import "../styles/global.css";   // Global variables
-import "../styles/AuthPage.css"; // Page-specific styles
+import "../styles/global.css";  
+import "../styles/AuthPage.css"; 
 
 const backendURL = "http://localhost:5000/api/auth";
 
 export default function AuthPage() {
   const [isRegister, setIsRegister] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", password: "", role: "user" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "user",
+    phone: "",
+    aadhar: "",
+  });
   const [message, setMessage] = useState("");
   const [dashboardRole, setDashboardRole] = useState("");
   const [userName, setUserName] = useState("");
 
   const toggleView = () => {
     setMessage("");
-    setFormData({ name: "", email: "", password: "", role: "user" });
+    setFormData({
+      name: "",
+      email: "",
+      password: "",
+      role: "user",
+      phone: "",
+      aadhar: "",
+    });
     setIsRegister(!isRegister);
   };
 
@@ -42,7 +56,10 @@ export default function AuthPage() {
     e.preventDefault();
     setMessage("");
     try {
-      const res = await axios.post(`${backendURL}/login`, { email: formData.email, password: formData.password });
+      const res = await axios.post(`${backendURL}/login`, {
+        email: formData.email,
+        password: formData.password,
+      });
       setMessage(res.data.message + ", Welcome " + res.data.name + "!");
       setDashboardRole(res.data.role);
       setUserName(res.data.name);
@@ -54,36 +71,72 @@ export default function AuthPage() {
 
   if (dashboardRole === "host") {
     return (
-      <Layout logoSrc="/Logo.png"> {/* Wrap HostDashboard in Layout */}
+      <Layout logoSrc="/Logo.png">
         <HostDashboard userName={userName} />
       </Layout>
     );
   }
   if (dashboardRole === "user") {
     return (
-      <Layout logoSrc="/Logo.png"> {/* Wrap UserDashboard in Layout */}
+      <Layout logoSrc="/Logo.png">
         <UserDashboard userName={userName} />
       </Layout>
     );
   }
 
   return (
-    <Layout logoSrc="/Logo.png"> {/* Wrap auth form in Layout */}
+    <Layout logoSrc="/Logo.png">
       <div className="auth-container">
         <div className="auth-card">
           <h1 className="auth-title">{isRegister ? "Register" : "Login"}</h1>
-          <form onSubmit={isRegister ? handleRegister : handleLogin} className="auth-form">
+          <form
+            onSubmit={isRegister ? handleRegister : handleLogin}
+            className="auth-form"
+          >
             {isRegister && (
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="auth-input"
-              />
+              <>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="auth-input"
+                />
+
+                <input
+                  type="text"
+                  name="phone"
+                  placeholder="Phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  required
+                  className="auth-input"
+                />
+
+                <input
+                  type="text"
+                  name="aadhar"
+                  placeholder="Aadhar"
+                  value={formData.aadhar}
+                  onChange={handleChange}
+                  required
+                  className="auth-input"
+                />
+
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleChange}
+                  className="auth-select"
+                >
+                  <option value="user">User</option>
+                  <option value="host">Host (Parking Provider)</option>
+                </select>
+              </>
             )}
+
             <input
               type="email"
               name="email"
@@ -102,27 +155,19 @@ export default function AuthPage() {
               required
               className="auth-input"
             />
-            {isRegister && (
-              <select
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="auth-select"
-              >
-                <option value="user">User</option>
-                <option value="host">Host (Parking Provider)</option>
-              </select>
-            )}
+
             <button type="submit" className="auth-btn">
               {isRegister ? "Register" : "Login"}
             </button>
           </form>
+
           <p className="toggle-text">
             {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
             <button onClick={toggleView} className="toggle-btn">
               {isRegister ? "Login" : "Register"}
             </button>
           </p>
+
           {message && (
             <p
               className={`auth-message ${
@@ -137,3 +182,4 @@ export default function AuthPage() {
     </Layout>
   );
 }
+
