@@ -5,10 +5,13 @@ import UserDashboard from "./UserDashboard";
 import Layout from "./Layout";
 import "../styles/global.css";   // Global variables
 import "../styles/AuthPage.css"; // Page-specific styles
+import { useLanguage } from "./LanguageContext"; // Import language context
 
 const backendURL = "http://localhost:5000/api/auth";
 
 export default function AuthPage() {
+  const { language } = useLanguage(); // Get current language from context
+
   const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -48,7 +51,7 @@ export default function AuthPage() {
       setDashboardRole(formData.role);
       setUserName(formData.name);
     } catch (err) {
-      setMessage(err.response?.data.error || "Registration failed");
+      setMessage(err.response?.data.error || (language === "en" ? "Registration failed" : "पंजीकरण विफल हुआ"));
     }
   };
 
@@ -60,12 +63,19 @@ export default function AuthPage() {
         email: formData.email,
         password: formData.password,
       });
-      setMessage(res.data.message + ", Welcome " + res.data.name + "!");
+      setMessage(
+        res.data.message +
+          ", " +
+          (language === "en" ? "Welcome" : "स्वागत है") +
+          " " +
+          res.data.name +
+          "!"
+      );
       setDashboardRole(res.data.role);
       setUserName(res.data.name);
       localStorage.setItem("token", res.data.token);
     } catch (err) {
-      setMessage(err.response?.data.error || "Login failed");
+      setMessage(err.response?.data.error || (language === "en" ? "Login failed" : "लॉगिन विफल हुआ"));
     }
   };
 
@@ -84,102 +94,134 @@ export default function AuthPage() {
     );
   }
 
+  // Translation texts for English and Hindi
+  const texts = {
+    en: {
+      register: "Register",
+      login: "Login",
+      name: "Name",
+      phone: "Phone",
+      aadhar: "Aadhar",
+      roleUser: "User",
+      roleHost: "Host (Parking Provider)",
+      email: "Email",
+      password: "Password",
+      alreadyAccount: "Already have an account?",
+      dontHaveAccount: "Don't have an account?",
+      toggleToLogin: "Login",
+      toggleToRegister: "Register",
+    },
+    hi: {
+      register: "पंजीकरण करें",
+      login: "लॉगिन करें",
+      name: "नाम",
+      phone: "फ़ोन",
+      aadhar: "आधार",
+      roleUser: "उपयोगकर्ता",
+      roleHost: "मेज़बान (पार्किंग प्रदाता)",
+      email: "ईमेल",
+      password: "पासवर्ड",
+      alreadyAccount: "क्या आपका पहले से खाता है?",
+      dontHaveAccount: "क्या आपका खाता नहीं है?",
+      toggleToLogin: "लॉगिन",
+      toggleToRegister: "पंजीकरण करें",
+    },
+  };
+
+  const t = texts[language]; // Selected texts based on language
+
   return (
     <Layout logoSrc="/Logo.png">
-      <div className="auth-container">
-        <div className="auth-card">
-          <h1 className="auth-title">{isRegister ? "Register" : "Login"}</h1>
-          <form
-            onSubmit={isRegister ? handleRegister : handleLogin}
-            className="auth-form"
-          >
-            {isRegister && (
-              <>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="auth-input"
-                />
+    <div className="auth-container">
+      <div className="auth-card">
+        <h1 className="auth-title">{isRegister ? t.register : t.login}</h1>
+        <form onSubmit={isRegister ? handleRegister : handleLogin} className="auth-form">
+          {isRegister && (
+            <>
+              <input
+                type="text"
+                name="name"
+                placeholder={t.name}
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="auth-input"
+              />
 
-                <input
-                  type="text"
-                  name="phone"
-                  placeholder="Phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  required
-                  className="auth-input"
-                />
+              <input
+                type="text"
+                name="phone"
+                placeholder={t.phone}
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="auth-input"
+              />
 
-                <input
-                  type="text"
-                  name="aadhar"
-                  placeholder="Aadhar"
-                  value={formData.aadhar}
-                  onChange={handleChange}
-                  required
-                  className="auth-input"
-                />
+              <input
+                type="text"
+                name="aadhar"
+                placeholder={t.aadhar}
+                value={formData.aadhar}
+                onChange={handleChange}
+                required
+                className="auth-input"
+              />
 
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleChange}
-                  className="auth-select"
-                >
-                  <option value="user">User</option>
-                  <option value="host">Host (Parking Provider)</option>
-                </select>
-              </>
-            )}
-
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="auth-input"
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="auth-input"
-            />
-
-            <button type="submit" className="auth-btn">
-              {isRegister ? "Register" : "Login"}
-            </button>
-          </form>
-
-          <p className="toggle-text">
-            {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
-            <button onClick={toggleView} className="toggle-btn">
-              {isRegister ? "Login" : "Register"}
-            </button>
-          </p>
-
-          {message && (
-            <p
-              className={`auth-message ${
-                message.toLowerCase().includes("failed") ? "error" : "success"
-              }`}
-            >
-              {message}
-            </p>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="auth-select"
+              >
+                <option value="user">{t.roleUser}</option>
+                <option value="host">{t.roleHost}</option>
+              </select>
+            </>
           )}
-        </div>
+
+          <input
+            type="email"
+            name="email"
+            placeholder={t.email}
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="auth-input"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder={t.password}
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="auth-input"
+          />
+
+          <button type="submit" className="auth-btn">
+            {isRegister ? t.register : t.login}
+          </button>
+        </form>
+
+        <p className="toggle-text">
+          {isRegister ? t.alreadyAccount : t.dontHaveAccount}{" "}
+          <button onClick={toggleView} className="toggle-btn">
+            {isRegister ? t.toggleToLogin : t.toggleToRegister}
+          </button>
+        </p>
+
+        {message && (
+          <p
+            className={`auth-message ${
+              message.toLowerCase().includes("failed") ? "error" : "success"
+            }`}
+          >
+            {message}
+          </p>
+        )}
       </div>
+    </div>
     </Layout>
   );
 }
-

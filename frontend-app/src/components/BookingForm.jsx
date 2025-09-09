@@ -1,7 +1,10 @@
 import React from "react";
 import "../styles/BookingForm.css";
+import { useLanguage } from "./LanguageContext";
 
 export default function BookingForm({ bookingDetails, setBookingDetails, onSubmit, bookingMessage, maxSlots }) {
+  const { language } = useLanguage();
+
   const handleChange = (e) => {
     const { name, value, type } = e.target;
     setBookingDetails((prev) => ({
@@ -10,10 +13,28 @@ export default function BookingForm({ bookingDetails, setBookingDetails, onSubmi
     }));
   };
 
+  // Translation texts
+  const texts = {
+    en: {
+      numberOfSlots: "Number of Slots:",
+      fromTime: "From Time:",
+      toTime: "To Time:",
+      confirmBooking: "Confirm Booking",
+    },
+    hi: {
+      numberOfSlots: "स्लॉट की संख्या:",
+      fromTime: "आरंभ समय:",
+      toTime: "समाप्ति समय:",
+      confirmBooking: "बुकिंग पुष्टि करें",
+    },
+  };
+
+  const t = texts[language];
+
   return (
     <form onSubmit={onSubmit} className="booking-form">
       <label className="booking-label">
-        Number of Slots:
+        {t.numberOfSlots}
         <input
           type="number"
           name="noOfSlots"
@@ -27,7 +48,7 @@ export default function BookingForm({ bookingDetails, setBookingDetails, onSubmi
       </label>
 
       <label className="booking-label">
-        From Time:
+        {t.fromTime}
         <input
           type="datetime-local"
           name="fromTime"
@@ -39,7 +60,7 @@ export default function BookingForm({ bookingDetails, setBookingDetails, onSubmi
       </label>
 
       <label className="booking-label">
-        To Time:
+        {t.toTime}
         <input
           type="datetime-local"
           name="toTime"
@@ -51,13 +72,13 @@ export default function BookingForm({ bookingDetails, setBookingDetails, onSubmi
       </label>
 
       <button type="submit" className="booking-btn">
-        Confirm Booking
+        {t.confirmBooking}
       </button>
 
       {bookingMessage && (
         <p
           className={`booking-message ${
-            bookingMessage.startsWith("Booking successful") ? "success" : "error"
+            bookingMessage.startsWith(language === "en" ? "Booking successful" : "बुकिंग सफल") ? "success" : "error"
           }`}
         >
           {bookingMessage}

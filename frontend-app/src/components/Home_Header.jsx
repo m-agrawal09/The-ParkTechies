@@ -1,28 +1,45 @@
 import React, { useState } from "react";
+import { useLanguage } from "./LanguageContext";  // Import language context
 import "../styles/Header.css";
 
 const Header = ({ logoSrc }) => {
   const [fontSize, setFontSize] = useState(16); // default font size
-  const [language, setLanguage] = useState("En"); // default language
+  const { language, toggleLanguage } = useLanguage(); // get global language state and toggle function
 
   const changeFontSize = (size) => setFontSize(size);
-  const toggleLanguage = () =>
-    setLanguage(language === "En" ? "Hi" : "En");
+
+  const texts = {
+    en: {
+      title: "DevoteeEase : Vehicle Parking Service",
+      home: "Home",
+      contact: "Contact Us",
+      langLabel: "En",
+    },
+    hi: {
+      title: "देवोतीईज : वाहन पार्किंग सेवा",
+      home: "होम",
+      contact: "संपर्क करें",
+      langLabel: "हि",
+    },
+  };
+
+  const t = texts[language];
 
   return (
     <header className="app-header">
       <div className="header-left">
-        <img src="/Logo.png" alt="Logo" className="header-logo" style={{ width: "20%", height: "auto" }} />
-        <h1 style={{ fontSize: `${fontSize}px` }}>
-          DevoteeEase : Vehicle Parking Service
-        </h1>
+        <img
+          src={logoSrc || "/Logo.png"}
+          alt="Logo"
+          className="header-logo"
+          style={{ width: "20%", height: "auto" }}
+        />
+        <h1 style={{ fontSize: `${fontSize}px` }}>{t.title}</h1>
       </div>
 
       <div className="header-right">
-        <button onClick={() => (window.location.href = "/")}>Home</button>
-        <button onClick={() => (window.location.href = "/contact")}>
-          Contact Us
-        </button>
+        <button onClick={() => (window.location.href = "/")}>{t.home}</button>
+        <button onClick={() => (window.location.href = "/contact")}>{t.contact}</button>
 
         <div className="font-controls">
           <button onClick={() => changeFontSize(fontSize + 2)}>A+</button>
@@ -31,9 +48,8 @@ const Header = ({ logoSrc }) => {
         </div>
 
         <button className="lang-switcher" onClick={toggleLanguage}>
-          {language}
+          {t.langLabel}
         </button>
-
       </div>
     </header>
   );
